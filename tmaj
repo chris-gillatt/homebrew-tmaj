@@ -1,85 +1,75 @@
 #!/bin/bash
-# Tmaj - Tell me a Joke on the command-line
-# Author: C Gillatt
 
-# Help message
-usage () { 
-
-echo "Usage: tmaj [OPTIONS]
-
-Tell me a Joke on the command-line
-
-Options:
-    -h             Display this help message
-    -c             Print a joke in coloured font
-    -f             Print the joke in large text
-    -j             Print a joke with no frills
-    -s             Print a joke inside a speech bubble 
-    -v              Print tmaj current version" 1>&2; }
-
-version_check () {
-  version=$(brew info tmaj | grep stable | awk '{print $3}')
-  echo "Tmaj version $version"
-} # End version_check
-
-# If no arguments are provided, print help
-if [ $# -eq 0 ]; then
-  usage
-  exit 0
-fi
-
-JOKE=$(curl -s -H "Accept: text/plain" https://icanhazdadjoke.com)
-test -n "$JOKE" || ( echo "It's no joke, there's no joke!  Are you connected to the internet?" && exit 1 ) 
-
-printJoke () {
-  echo "$JOKE"
-} # End printJoke
-
-printJokeWithSpeechBubble () {
-  echo "$JOKE" | cowsay -n -f tux
-} # End printJokeWithSpeechBubble
-
-printJokeWithColour () {
-  echo "$JOKE" | lolcat
-} # End printJokeWithSpeechBubble
-
-printJokeInBigText () { 
-  figlet "$JOKE"
+# Function to fetch a random joke from icanhazdadjoke.com API
+fetch_joke() {
+    joke=$(curl -sH "Accept: text/plain" https://icanhazdadjoke.com/)
+    echo "$joke"
 }
 
+# Function to print a joke with specified options
+print_joke() {
+    local joke="$1"
+    local color="$2"
+    local large_font="$3"
+    local speech_bubble="$4"
 
-# Provide parameter flags and reply accordingly
-while getopts ":hcfjsv" opt; do
-  case ${opt} in
-    h )
-      usage
-      exit 0
-      ;;
-    c ) 
-      printJokeWithColour
-      ;;
-    f ) 
-      printJokeInBigText
-      ;;
-    j ) 
-      printJoke
-      exit 0
-      ;;
-    s ) 
-      printJokeWithSpeechBubble
-      ;;
-    v )
-      version_check
-      ;;
-    \? )
-      echo "Invalid Option: -$OPTARG" 1>&2
-      usage
-      exit 1
-      ;;
-  esac
+    local cowsay_path="/opt/homebrew/Cellar/cowsay/3.04_1/share/cows/"
+
+    if [[ "$speech_bubble" == "true" ]]; then
+        if [ -d "$cowsay_path" ]; then
+            if [[ "$color" == "true" ]]; then
+                if [[ "$large_font" == "true" ]]; then
+                    echo "$joke" | figlet | lolcat | cowsay -n -f "$(ls "$cowsay_path" | shuf -n 1)" | lolcat
+                else
+                    echo "$joke" | cowsay -n -f "$(ls "$cowsay_path" | shuf -n 1)" | lolcat
+                fi
+            else
+                if [[ "$large_font" == "true" ]]; then
+                    echo "$joke" | figlet | cowsay -n -f "$(ls "$cowsay_path" | shuf -n 1)"
+                else
+                    echo "$joke" | cowsay -n -f "$(ls "$cowsay_path" | shuf -n 1)"
+                fi
+            fi
+        else
+            echo "Error: Cowsay cowfiles directory not found at $cowsay_path"
+        fi
+    elif [[ "$color" == "true" ]]; then
+        if [[ "$large_font" == "true" ]]; then
+            echo "$joke" | figlet | lolcat
+        else
+            echo "$joke" | lolcat
+        fi
+    elif [[ "$large_font" == "true" ]]; then
+        echo "$joke" | figlet
+    else
+        echo "$joke"
+    fi
+}
+
+# Main script
+
+# Initialize flags
+color="false"
+large_font="false"
+speech_bubble="false"
+
+# Parse command line flags
+while getopts "cfl" opt; do
+    case ${opt} in
+        c ) color="true";;
+        f ) large_font="true";;
+        l ) speech_bubble="true";;
+        \? ) echo "Usage: $(basename $0) [-c] [-f] [-l]"
+             echo "Options:"
+             echo "  -c    Print joke in color"
+             echo "  -f    Print joke in large font"
+             echo "  -l    Print joke inside a speech bubble"
+             exit 1;;
+    esac
 done
-shift $((OPTIND -1))
 
+# Fetch a random joke
+joke=$(fetch_joke)
 
-
-# figlet $(curl -s -H "Accept: text/plain" https://icanhazdadjoke.com) | cowsay -n -f tux | lolcat
+# Print the joke with specified options
+print_joke "$joke" "$color" "$large_font" "$speech_bubble"
