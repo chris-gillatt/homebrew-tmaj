@@ -1,0 +1,85 @@
+#!/bin/bash
+# Tmaj - Tell me a Joke on the command-line
+# Author: C Gillatt
+
+# Help message
+usage () { 
+
+echo "Usage: tmaj [OPTIONS]
+
+Tell me a Joke on the command-line
+
+Options:
+    -h             Display this help message
+    -c             Print a joke in coloured font
+    -f             Print the joke in large text
+    -j             Print a joke with no frills
+    -s             Print a joke inside a speech bubble 
+    -v              Print tmaj current version" 1>&2; }
+
+version_check () {
+  version=$(brew info tmaj | grep stable | awk '{print $3}')
+  echo "Tmaj version $version"
+} # End version_check
+
+# If no arguments are provided, print help
+if [ $# -eq 0 ]; then
+  usage
+  exit 0
+fi
+
+JOKE=$(curl -s -H "Accept: text/plain" https://icanhazdadjoke.com)
+test -n "$JOKE" || ( echo "It's no joke, there's no joke!  Are you connected to the internet?" && exit 1 ) 
+
+printJoke () {
+  echo "$JOKE"
+} # End printJoke
+
+printJokeWithSpeechBubble () {
+  echo "$JOKE" | cowsay -n -f tux
+} # End printJokeWithSpeechBubble
+
+printJokeWithColour () {
+  echo "$JOKE" | lolcat
+} # End printJokeWithSpeechBubble
+
+printJokeInBigText () { 
+  figlet "$JOKE"
+}
+
+
+# Provide parameter flags and reply accordingly
+while getopts ":hcfjsv" opt; do
+  case ${opt} in
+    h )
+      usage
+      exit 0
+      ;;
+    c ) 
+      printJokeWithColour
+      ;;
+    f ) 
+      printJokeInBigText
+      ;;
+    j ) 
+      printJoke
+      exit 0
+      ;;
+    s ) 
+      printJokeWithSpeechBubble
+      ;;
+    v )
+      version_check
+      ;;
+    \? )
+      echo "Invalid Option: -$OPTARG" 1>&2
+      usage
+      exit 1
+      ;;
+  esac
+done
+shift $((OPTIND -1))
+
+
+
+# figlet $(curl -s -H "Accept: text/plain" https://icanhazdadjoke.com) | cowsay -n -f tux | lolcat
