@@ -13,7 +13,7 @@ print_joke() {
     local large_font="$3"
     local speech_bubble="$4"
 
-    local cowsay_path="/opt/homebrew/Cellar/cowsay/3.04_1/share/cows/"
+    local cowsay_path=$(find /opt/homebrew/Cellar/cowsay -type d -name 'cows')/
 
     if [[ "$speech_bubble" == "true" ]]; then
         if [ -d "$cowsay_path" ]; then

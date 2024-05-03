@@ -5,7 +5,7 @@ class Tmaj < Formula
   sha256 "<%= `sha256sum tars/tmaj-0.0.#{ENV["RELEASE_COUNT"]}.tar.gz | awk '{printf $1}'` %>"
   version "0.1.<%= ENV["RELEASE_COUNT"] %>"
 
-  depends_on ["curl", "figlet", "cowsay", "lolcat"]
+  depends_on ["curl", "figlet", "cowsay", "lolcat", "coreutils"]
 
   def install
     bin.install "tmaj"
