@@ -21,3 +21,5 @@ Install/uninstall/upgrade tmaj using brew:
 
 `brew install tmaj`
 
+# MIT LICENSE
+[MIT Licence](https://github.com/chris-gillatt/tmaj/main/LICENSE-MIT)
