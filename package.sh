@@ -32,7 +32,9 @@ export GIT_TRACE=1
 git add "${APP}.rb"
 # Commit and push files to repo
 git commit -m "Push $APP Release 0.0.${RELEASE_COUNT}" &&
-git push https://"${ORG}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}".git "$BRANCH"
+git push "https://${MADEUP}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}.git" "$BRANCH"
+
+echo "line 37"
 
 # Publish go cli binaries
 post_release_json()
