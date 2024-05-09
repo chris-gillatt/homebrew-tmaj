@@ -1,4 +1,4 @@
-# [![release](https://github.com/chris-gillatt/tmaj/actions/workflows/main.yml/badge.svg)](https://github.com/chris-gillatt/tmaj/actions/workflows/main.yml) Tell me a Joke (Tmaj)
+# [![CI](https://github.com/chris-gillatt/tmaj/actions/workflows/ci.yml/badge.svg)](https://github.com/chris-gillatt/tmaj/actions/workflows/ci.yml) Tell me a Joke (Tmaj)
 Prints a random joke on the command-line from the icanhazdadjoke.com API
 
 # Usage
