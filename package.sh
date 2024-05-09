@@ -6,9 +6,9 @@ announce () {
 } # End announce
 
 git config user.email "$USER_EMAIL"
-git config user.name "$USER"
+git config user.name "$USER_NAME"
 
-echo "username is $USER"
+echo "username is $USER_NAME"
 
 export APP="tmaj"
 REPO_NAME="tmaj"
@@ -30,7 +30,7 @@ erb "${APP}.erb" > "${APP}.rb"
 git add "${APP}.rb"
 # Commit and push files to repo
 git commit -m "Push $APP Release 0.0.${RELEASE_COUNT}" &&
-git push https://"${USER}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}".git "$BRANCH"
+git push https://"${USER_NAME}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}".git "$BRANCH"
 
 # Publish go cli binaries
 post_release_json()
@@ -48,7 +48,7 @@ announce "Creating release.."
 
 NEW_RELEASE_RESPONSE=$(curl --silent \
                             --write-out "\n%{http_code}" \
-                            -u "$USER:$USER_PASSWORD" \
+                            -u "$USER_NAME:$USER_PASSWORD" \
                             -H "Accept: application/json" \
                             -H "Content-Type:application/json" \
                             -X POST "https://api.github.com/repos/${ORG}/${REPO_NAME}/releases" \
@@ -70,7 +70,7 @@ UPLOAD_URL=$(echo "$NEW_RELEASE" | jq -r .upload_url | cut -f1 -d"{")
 announce "Uploading binaries"
 
 curl --fail \
-     -u "${USER}:${USER_PASSWORD}" \
+     -u "${USER_NAME}:${USER_PASSWORD}" \
      -H "Content-Type:application/octet-stream" \
      -X POST "${UPLOAD_URL}?name=${APP}-0.0.${RELEASE_COUNT}.tar.gz" \
      --data-binary "@tars/${APP}-0.0.${RELEASE_COUNT}.tar.gz" \
