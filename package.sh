@@ -1,14 +1,14 @@
 #!/bin/bash -e
 # Brew package script
 
-prefix () {
-  echo "$0: $@"
-}
+announce () {
+  echo "$(basename "$0"): $@"
+} # End announce
 
-prefix "Some test"
+git config user.email "$USER_EMAIL"
+git config user.name "$USER_NAME"
 
-git config --global user.name "$USER_NAME"
-git config --global user.email "$USER_EMAIL"
+echo "username is $USER_NAME"
 
 export APP="tmaj"
 REPO_NAME="tmaj"
@@ -43,7 +43,7 @@ post_release_json()
 EOF
 }
 
-echo "Creating release.."
+announce "Creating release.."
 
 NEW_RELEASE_RESPONSE=$(curl --silent \
                             --write-out "\n%{http_code}" \
@@ -56,17 +56,17 @@ STATUS_CODE=$(echo "$NEW_RELEASE_RESPONSE" | tail -n 1)
 NEW_RELEASE=$(echo "$NEW_RELEASE_RESPONSE" | sed '$d')
 
 if [[ $STATUS_CODE -ge 400 ]]; then
-  echo 'ERROR: Failed to create release'
-  echo "$STATUS_CODE"
-  echo "$NEW_RELEASE"
+  announce 'ERROR: Failed to create release'
+  announce "$STATUS_CODE"
+  announce "$NEW_RELEASE"
   exit 1
 fi
 
-echo "Release created"
+announce "Release created"
 
 UPLOAD_URL=$(echo "$NEW_RELEASE" | jq -r .upload_url | cut -f1 -d"{")
 
-echo "Uploading binaries"
+announce "Uploading binaries"
 
 curl --fail \
      -u "${USER_NAME}:${USER_PASSWORD}" \
@@ -75,5 +75,5 @@ curl --fail \
      --data-binary "@tars/${APP}-0.0.${RELEASE_COUNT}.tar.gz" \
      | jq -rc '.name + " - " + .url + " - " + .state'
 
-echo "$0 Done."
-echo "Release created successfully."
+announce "Done."
+announce "Release created successfully."
