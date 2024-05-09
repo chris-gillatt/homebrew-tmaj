@@ -12,6 +12,7 @@ echo "username is $USER_NAME"
 
 export APP="tmaj"
 REPO_NAME="tmaj"
+GITHUB_USER_NAME='chris-gillatt'
 
 export RELEASE_COUNT="$GITHUB_RUN_NUMBER"
 GIT_REVISION=$(git rev-parse HEAD)
@@ -30,7 +31,7 @@ erb "${APP}.erb" > "${APP}.rb"
 git add "${APP}.rb"
 # Commit and push files to repo
 git commit -m "Push $APP Release 0.0.${RELEASE_COUNT}" &&
-git push https://"${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}".git "$BRANCH"
+git push https://"${GITHUB_USER_NAME}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}".git "$BRANCH"
 
 # Publish go cli binaries
 post_release_json()
