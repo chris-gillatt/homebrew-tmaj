@@ -9,11 +9,11 @@ git config user.email "$USER_EMAIL"
 export RELEASE_COUNT="$GITHUB_RUN_NUMBER"
 GIT_REVISION=$(git rev-parse HEAD)
 
-BRANCH="master"
+BRANCH="main"
 
 # Compress new version and place in tars directory
 mkdir tars
-tar cvf tars/"${APP}-0.1.${RELEASE_COUNT}.tar.gz" "$APP"
+tar cvf tars/"${APP}-0.0.${RELEASE_COUNT}.tar.gz" "$APP"
 
 # Generate Ruby file for Brew using template
 erb "${APP}.erb" > "${APP}.rb"
@@ -21,7 +21,7 @@ erb "${APP}.erb" > "${APP}.rb"
 ## Git Tasks
 git add "${APP}.rb"
 # Commit and push files to repo
-git commit -m "Push $APP Release 0.1.${RELEASE_COUNT}" &&
+git commit -m "Push $APP Release 0.0.${RELEASE_COUNT}" &&
 git push https://"${USER_NAME}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}".git "$BRANCH"
 
 # Publish go cli binaries
@@ -29,9 +29,9 @@ post_release_json()
 {
   cat <<EOF
 {
-  "tag_name":         "0.1.${RELEASE_COUNT}",
+  "tag_name":         "0.0.${RELEASE_COUNT}",
   "target_commitish": "${GIT_REVISION}",
-  "name":             "0.1.${RELEASE_COUNT}"
+  "name":             "0.0.${RELEASE_COUNT}"
 }
 EOF
 }
@@ -64,8 +64,8 @@ echo "Uploading binaries"
 curl --fail \
      -u "${USER_NAME}:${USER_PASSWORD}" \
      -H "Content-Type:application/octet-stream" \
-     -X POST "${UPLOAD_URL}?name=${APP}-0.1.${RELEASE_COUNT}.tar.gz" \
-     --data-binary "@tars/${APP}-0.1.${RELEASE_COUNT}.tar.gz" \
+     -X POST "${UPLOAD_URL}?name=${APP}-0.0.${RELEASE_COUNT}.tar.gz" \
+     --data-binary "@tars/${APP}-0.0.${RELEASE_COUNT}.tar.gz" \
      | jq -rc '.name + " - " + .url + " - " + .state'
 
 echo "$0 Done."

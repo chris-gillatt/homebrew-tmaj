@@ -1,6 +1,6 @@
 #!/bin/bash
+# Prints a random joke on the command-line from the icanhazdadjoke.com API
 
-# Function to fetch a random joke from icanhazdadjoke.com API
 fetch_joke() {
     joke=$(curl -sH "Accept: text/plain" https://icanhazdadjoke.com/)
     echo "$joke"
