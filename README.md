@@ -1,5 +1,5 @@
-# [![CI](https://github.com/chris-gillatt/tmaj/actions/workflows/prod.yml/badge.svg)](https://github.com/chris-gillatt/tmaj/actions/workflows/prod.yml) Tell me a Joke (Tmaj)
-A command-line 'app' which produces a random joke, with a couple of amusing options.  Used to demonstrate brew packaging and distribution. 
+# [![release](https://github.com/chris-gillatt/tmaj/actions/workflows/main.yml/badge.svg)](https://github.com/chris-gillatt/tmaj/actions/workflows/main.yml) Tell me a Joke (Tmaj)
+Prints a random joke on the command-line from the icanhazdadjoke.com API
 
 # Usage
 ```
@@ -21,5 +21,3 @@ Install/uninstall/upgrade tmaj using brew:
 
 `brew install tmaj`
 
-# MIT LICENSE
-[MIT Licence](https://github.com/chris-gillatt/tmaj/blob/main/LICENSE-MIT)
