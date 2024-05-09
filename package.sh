@@ -30,7 +30,7 @@ erb "${APP}.erb" > "${APP}.rb"
 git add "${APP}.rb"
 # Commit and push files to repo
 git commit -m "Push $APP Release 0.0.${RELEASE_COUNT}" &&
-git push https://"${USER_NAME}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}".git "$BRANCH"
+git push https://"${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}".git "$BRANCH"
 
 # Publish go cli binaries
 post_release_json()
