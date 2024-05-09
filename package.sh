@@ -1,10 +1,17 @@
 #!/bin/bash -e
 # Brew package script
+
+prefix () {
+  echo "$0: $@"
+}
+
+prefix "Some test"
+
+git config --global user.name "$USER_NAME"
+git config --global user.email "$USER_EMAIL"
+
 export APP="tmaj"
 REPO_NAME="tmaj"
-
-git config user.name "$USER_NAME"
-git config user.email "$USER_EMAIL"
 
 export RELEASE_COUNT="$GITHUB_RUN_NUMBER"
 GIT_REVISION=$(git rev-parse HEAD)
@@ -69,4 +76,4 @@ curl --fail \
      | jq -rc '.name + " - " + .url + " - " + .state'
 
 echo "$0 Done."
-
+echo "Release created successfully."
