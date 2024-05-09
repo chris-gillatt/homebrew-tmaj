@@ -32,5 +32,4 @@ jobs:
             USER_NAME: ${{ vars.USER }}
             USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
         run: |
-          ./package.sh
-          echo "Done."
+          ./package.sh && echo "Release created successfully."
