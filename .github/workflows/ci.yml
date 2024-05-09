@@ -27,9 +27,9 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Create Release 
         env:
-            GH_ORG: ${{ vars.GH_ORG }}
-            GH_PAT: ${{ secrets.GH_PAT }}
-            GIT_USER_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
-            GIT_USER_NAME: ${{ vars.GIT_USER_NAME }}
+            ORG: ${{ vars.ORG }}
+            USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+            USER_EMAIL: ${{ secrets.USER_EMAIL }}
+            USER_NAME: ${{ vars.USER_NAME }}
         run: |
           ./package.sh

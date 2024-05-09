@@ -2,22 +2,19 @@
 # Brew package script
 
 announce () {
-  echo "$(basename "$0"): $*"
+  echo "$(basename "$0"): $@"
 } # End announce
 
-git config user.email "$GIT_USER_EMAIL"
-git config user.name "$GIT_USER_NAME"
+git config user.email "$USER_EMAIL"
+git config user.name "$USER_NAME"
 
-echo "Git username is $GIT_USER_NAME"
 
-if [ -n "$GIT_USER_EMAIL" ]; then
-  echo "git config user.email is set"
-else
-  echo "Something broke"
-fi
+git config --list
+
+echo "username is $USER_NAME"
 
 export APP="tmaj"
-GH_REPO_NAME="tmaj"
+REPO_NAME="tmaj"
 
 export RELEASE_COUNT="$GITHUB_RUN_NUMBER"
 GIT_REVISION=$(git rev-parse HEAD)
@@ -26,20 +23,16 @@ BRANCH="main"
 
 # Compress new version and place in tars directory
 mkdir tars
-announce "Files added to tar: "
 tar cvf tars/"${APP}-0.0.${RELEASE_COUNT}.tar.gz" "$APP"
 
 # Generate Ruby file for Brew using template
 erb "${APP}.erb" > "${APP}.rb"
 
 ## Git Tasks
-export GIT_TRACE=1
 git add "${APP}.rb"
 # Commit and push files to repo
 git commit -m "Push $APP Release 0.0.${RELEASE_COUNT}" &&
-git push "https://${GH_ORG}:${GH_PAT}@github.com/${GH_ORG}/${GH_REPO_NAME}.git" "$BRANCH"
-
-echo "line 37"
+git push https://"${USER_NAME}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}".git "$BRANCH"
 
 # Publish go cli binaries
 post_release_json()
@@ -57,10 +50,10 @@ announce "Creating release.."
 
 NEW_RELEASE_RESPONSE=$(curl --silent \
                             --write-out "\n%{http_code}" \
-                            -u "$GH_ORG:$GH_PAT" \
+                            -u "$USER_NAME:$USER_PASSWORD" \
                             -H "Accept: application/json" \
                             -H "Content-Type:application/json" \
-                            -X POST "https://api.github.com/repos/${GH_ORG}/${GH_REPO_NAME}/releases" \
+                            -X POST "https://api.github.com/repos/${ORG}/${REPO_NAME}/releases" \
                             --data "$(post_release_json)")
 STATUS_CODE=$(echo "$NEW_RELEASE_RESPONSE" | tail -n 1)
 NEW_RELEASE=$(echo "$NEW_RELEASE_RESPONSE" | sed '$d')
@@ -79,7 +72,7 @@ UPLOAD_URL=$(echo "$NEW_RELEASE" | jq -r .upload_url | cut -f1 -d"{")
 announce "Uploading binaries"
 
 curl --fail \
-     -u "${GH_ORG}:${GH_PAT}" \
+     -u "${USER_NAME}:${USER_PASSWORD}" \
      -H "Content-Type:application/octet-stream" \
      -X POST "${UPLOAD_URL}?name=${APP}-0.0.${RELEASE_COUNT}.tar.gz" \
      --data-binary "@tars/${APP}-0.0.${RELEASE_COUNT}.tar.gz" \
