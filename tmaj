@@ -20,15 +20,15 @@ print_joke() {
         if [ -d "$COWSAY_PATH" ]; then
             if [[ "$COLOUR" == "true" ]]; then
                 if [[ "$LARGE_FONT" == "true" ]]; then
-                    echo "$JOKE" | figlet | lolcat | cowsay -n -f "$(ls "$COWSAY_PATH" | shuf -n 1)" | lolcat
+                    echo "$JOKE" | figlet | lolcat | cowsay -n -f "$(ls "$COWSAY_PATH" | grep \.cow | shuf -n 1)" | lolcat
                 else
-                    echo "$JOKE" | cowsay -n -f "$(ls "$COWSAY_PATH" | shuf -n 1)" | lolcat
+                    echo "$JOKE" | cowsay -n -f "$(ls "$COWSAY_PATH" | grep \.cow | shuf -n 1)" | lolcat
                 fi
             else
                 if [[ "$LARGE_FONT" == "true" ]]; then
-                    echo "$JOKE" | figlet | cowsay -n -f "$(ls "$COWSAY_PATH" | shuf -n 1)"
+                    echo "$JOKE" | figlet | cowsay -n -f "$(ls "$COWSAY_PATH" | grep \.cow | shuf -n 1)"
                 else
-                    echo "$JOKE" | cowsay -n -f "$(ls "$COWSAY_PATH" | shuf -n 1)"
+                    echo "$JOKE" | cowsay -n -f "$(ls "$COWSAY_PATH" | grep \.cow | shuf -n 1)"
                 fi
             fi
         else
