@@ -2,7 +2,7 @@
 # Brew package script
 
 announce () {
-  echo "$(basename "$0"): $@"
+  echo "$(basename "$0"): $*"
 } # End announce
 
 # announce "-----ENV------"
@@ -74,7 +74,7 @@ NEW_RELEASE_RESPONSE=$(curl --silent \
                             -u "$CG_GITHUB_USERNAME:$CG_GITHUB_PAT" \
                             -H "Accept: application/json" \
                             -H "Content-Type:application/json" \
-                            -X POST "https://api.github.com/repos/${ORG}/${REPO_NAME}/releases" \
+                            -X POST "https://api.github.com/repos/${CG_ORG}/${REPO_NAME}/releases" \
                             --data "$(post_release_json)")
 STATUS_CODE=$(echo "$NEW_RELEASE_RESPONSE" | tail -n 1)
 NEW_RELEASE=$(echo "$NEW_RELEASE_RESPONSE" | sed '$d')
