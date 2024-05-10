@@ -10,13 +10,13 @@ env | sort
 announce "-----END ENV------"
 
 git config --global user.email "$USER_EMAIL"
-git config --global user.name "$ORG"
+git config --global user.name "$USER_NAME"
 
 announce "-----GIT CONFIG------"
 git config --list
 announce "-----END GIT CONFIG------"
 
-announce "$USER_NAME"
+announce "USER_NAME = $USER_NAME"
 
 export APP="tmaj"
 REPO_NAME="tmaj"
@@ -33,6 +33,10 @@ tar cvf tars/"${APP}-0.0.${RELEASE_COUNT}.tar.gz" "$APP"
 # Generate Ruby file for Brew using template
 erb "${APP}.erb" > "${APP}.rb"
 
+announce "-----Ruby file------"
+cat "${APP}.rb"
+announce "-----End Ruby file------"
+
 ## Git Tasks
 git add "${APP}.rb"
 # Commit and push files to repo
@@ -40,8 +44,8 @@ git commit -m "Push $APP Release 0.0.${RELEASE_COUNT}"
 announce "-----GIT STATUS------"
 git status
 announce "-----END GIT status------"
-announce "Path to push: https://${ORG}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}.git $BRANCH"
-git push "https://${ORG}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}.git $BRANCH"
+announce "Path to push: https://${GH_USER_NAME}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}.git $BRANCH"
+git push "https://${GH_USER_NAME}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}.git $BRANCH"
 
 # Publish go cli binaries
 post_release_json()
@@ -81,7 +85,7 @@ UPLOAD_URL=$(echo "$NEW_RELEASE" | jq -r .upload_url | cut -f1 -d"{")
 announce "Uploading binaries"
 
 curl --fail \
-     -u "${ORG}:${USER_PASSWORD}" \
+     -u "${GH_USER_NAME}:${USER_PASSWORD}" \
      -H "Content-Type:application/octet-stream" \
      -X POST "${UPLOAD_URL}?name=${APP}-0.0.${RELEASE_COUNT}.tar.gz" \
      --data-binary "@tars/${APP}-0.0.${RELEASE_COUNT}.tar.gz" \
