@@ -13,6 +13,10 @@ announce "Set Git Config"
 # git config --global user.name "$CG_GIT_USERNAME"
 # git config --global user.email "$CG_GIT_EMAIL"
 
+
+git config user.name "github-actions[bot]"
+git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
 echo 
 announce "-----GIT CONFIG------"
 git config --list | sort 
