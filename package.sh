@@ -9,11 +9,11 @@ announce () {
 
 announce "Starting up!"
 
-# Set app and Repository name here
+# Set app and Repository name here.
 export APP="tmaj"
 REPO_NAME="tmaj"
 
-# Use the GitHub Actions Run number for versioning
+# Use the GitHub Actions Run number for versioning.
 export RELEASE_COUNT="$GITHUB_RUN_NUMBER"
 GIT_REVISION=$(git rev-parse HEAD)
 
@@ -22,7 +22,7 @@ GIT_REVISION=$(git rev-parse HEAD)
 mkdir -v tars
 tar cvf tars/"${APP}-0.0.${RELEASE_COUNT}.tar.gz" "$APP"
 
-# Generate Ruby file for Brew using the erb template
+# Generate Ruby file for Brew using the erb template.
 erb "${APP}.erb" > "${APP}.rb"
 
 ## Commit the new ruby file back to the repository.
@@ -31,7 +31,7 @@ git add "${APP}.rb"
 git commit -m "$APP release 0.0.${RELEASE_COUNT}"
 git push
 
-# Create a json payload to help us create release tags
+# Create a json payload to help us create a release with GitHub tags.
 post_release_json()
 {
   cat <<EOF
