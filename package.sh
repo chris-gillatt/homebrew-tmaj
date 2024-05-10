@@ -27,15 +27,12 @@ export APP="tmaj"
 REPO_NAME="tmaj"
 # BRANCH="main"
 
-#export RELEASE_COUNT="$GITHUB_RUN_NUMBER"
+export RELEASE_COUNT="$GITHUB_RUN_NUMBER"
 GIT_REVISION=$(git rev-parse HEAD)
-export GITHUB_RUN_NUMBER
-
-test -n "$GITHUB_RUN_NUMBER" || exit 1 
 
 # Compress new version and place in tars directory
 mkdir -v tars
-tar cvf tars/"${APP}-0.0.${GITHUB_RUN_NUMBER}.tar.gz" "$APP"
+tar cvf tars/"${APP}-0.0.${RELEASE_COUNT}.tar.gz" "$APP"
 
 # Generate Ruby file for Brew using template
 erb "${APP}.erb" > "${APP}.rb"
@@ -47,7 +44,7 @@ erb "${APP}.erb" > "${APP}.rb"
 ## Git Tasks
 git add "${APP}.rb"
 # Commit and push files to repo
-git commit -m "$APP release 0.0.${GITHUB_RUN_NUMBER}"
+git commit -m "$APP release 0.0.${RELEASE_COUNT}"
 # announce "-----GIT STATUS------"
 # git status
 # announce "-----END GIT status------"
@@ -63,9 +60,9 @@ post_release_json()
 {
   cat <<EOF
 {
-  "tag_name":         "0.0.${GITHUB_RUN_NUMBER}",
+  "tag_name":         "0.0.${RELEASE_COUNT}",
   "target_commitish": "${GIT_REVISION}",
-  "name":             "0.0.${GITHUB_RUN_NUMBER}"
+  "name":             "0.0.${RELEASE_COUNT}"
 }
 EOF
 }
@@ -98,8 +95,8 @@ announce "Uploading binaries"
 curl --fail \
      -u "${GITHUB_ACTOR}:${CG_GITHUB_PAT}" \
      -H "Content-Type:application/octet-stream" \
-     -X POST "${UPLOAD_URL}?name=${APP}-0.0.${GITHUB_RUN_NUMBER}.tar.gz" \
-     --data-binary "@tars/${APP}-0.0.${GITHUB_RUN_NUMBER}.tar.gz" \
+     -X POST "${UPLOAD_URL}?name=${APP}-0.0.${RELEASE_COUNT}.tar.gz" \
+     --data-binary "@tars/${APP}-0.0.${RELEASE_COUNT}.tar.gz" \
      | jq -rc '.name + " - " + .url + " - " + .state'
 
 announce "Done."
