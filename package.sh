@@ -1,61 +1,37 @@
 #!/bin/bash -e
-# Brew package script
+# Brew package script for GitHub Actions
+# Author: C Gillatt
 
+# Prefix log output with the name of the script for easy identification.
 announce () {
   echo "$(basename "$0"): $*"
 } # End announce
 
-# announce "-----ENV------"
-# env | sort
-# announce "-----END ENV------"
+announce "Starting up!"
 
-# announce "Set Git Config"
-# git config --global user.name "$CG_GIT_USERNAME"
-# git config --global user.email "$CG_GIT_EMAIL"
-
-
-# git config user.name "github-actions[bot]"
-# git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-# echo 
-# announce "-----GIT CONFIG------"
-# git config --list | sort 
-# announce "-----END GIT CONFIG------"
-# echo 
-
+# Set app and Repository name here
 export APP="tmaj"
 REPO_NAME="tmaj"
-# BRANCH="main"
 
+# Use the GitHub Actions Run number for versioning
 export RELEASE_COUNT="$GITHUB_RUN_NUMBER"
 GIT_REVISION=$(git rev-parse HEAD)
 
-# Compress new version and place in tars directory
+# Compress new app version and place in a directory for seperation.
+# This is useful when there's several files to package up too.
 mkdir -v tars
 tar cvf tars/"${APP}-0.0.${RELEASE_COUNT}.tar.gz" "$APP"
 
-# Generate Ruby file for Brew using template
+# Generate Ruby file for Brew using the erb template
 erb "${APP}.erb" > "${APP}.rb"
 
-# announce "-----Ruby file------"
-# ls -l "${APP}.rb"
-# announce "-----End Ruby file------"
-
-## Git Tasks
+## Commit the new ruby file back to the repository.
 git add "${APP}.rb"
 # Commit and push files to repo
 git commit -m "$APP release 0.0.${RELEASE_COUNT}"
-# announce "-----GIT STATUS------"
-# git status
-# announce "-----END GIT status------"
+git push
 
-# announce "-----GIT remote------"
-# git remote -v
-# announce "-----END GIT remote------"
-
-git push # https://${CG_GITHUB_USERNAME}:${CG_GITHUB_PAT}@github.com/${CG_ORG}/tmaj.git ${BRANCH}
-
-# Publish go cli binaries
+# Create a json payload to help us create release tags
 post_release_json()
 {
   cat <<EOF
@@ -67,7 +43,7 @@ post_release_json()
 EOF
 }
 
-announce "Creating release.."
+announce "Creating release"
 
 NEW_RELEASE_RESPONSE=$(curl --silent \
                             --write-out "\n%{http_code}" \
@@ -86,7 +62,7 @@ if [[ $STATUS_CODE -ge 400 ]]; then
   exit 1
 fi
 
-announce "Release created"
+announce "Release created successfully"
 
 UPLOAD_URL=$(echo "$NEW_RELEASE" | jq -r .upload_url | cut -f1 -d"{")
 
@@ -99,5 +75,5 @@ curl --fail \
      --data-binary "@tars/${APP}-0.0.${RELEASE_COUNT}.tar.gz" \
      | jq -rc '.name + " - " + .url + " - " + .state'
 
-announce "Done."
-announce "Release created successfully."
+announce "Upload successful"
+announce "Script completed successfully!"
