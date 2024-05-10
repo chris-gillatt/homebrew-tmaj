@@ -27,10 +27,10 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Create Release 
         env:
-            ORG: ${{ vars.ORG }}
+            ORG: ${{ secrets.ORG }}
             USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
             USER_EMAIL: ${{ secrets.USER_EMAIL }}
-            USER_NAME: ${{ vars.USER_NAME }}
-            GH_USER_NAME: ${{ vars.GH_USER_NAME }}
+            USER_NAME: ${{ secrets.USER_NAME }}
+            GH_USER_NAME: ${{ secrets.GH_USER_NAME }}
         run: |
           ./package.sh
