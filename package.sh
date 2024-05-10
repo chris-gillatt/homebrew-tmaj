@@ -5,13 +5,18 @@ announce () {
   echo "$(basename "$0"): $@"
 } # End announce
 
+announce "-----ENV------"
+env 
+announce "-----END ENV------"
+
 git config user.email "$USER_EMAIL"
 git config user.name "$USER_NAME"
 
-
+announce "-----GIT CONFIG------"
 git config --list
+announce "-----END GIT CONFIG------"
 
-echo "username is $USER_NAME"
+announce "$USER_NAME"
 
 export APP="tmaj"
 REPO_NAME="tmaj"
