@@ -40,8 +40,8 @@ git commit -m "Push $APP Release 0.0.${RELEASE_COUNT}"
 announce "-----GIT STATUS------"
 git status
 announce "-----END GIT status------"
-announce "Path to push: https://${GITHUB_ACTOR}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}.git $BRANCH"
-git push "https://${GITHUB_ACTOR}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}.git $BRANCH"
+announce "Path to push: https://chris-gillatt:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}.git $BRANCH"
+git push "https://chris-gillatt:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}.git $BRANCH"
 
 # Publish go cli binaries
 post_release_json()
