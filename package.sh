@@ -40,8 +40,8 @@ git commit -m "Push $APP Release 0.0.${RELEASE_COUNT}"
 announce "-----GIT STATUS------"
 git status
 announce "-----END GIT status------"
-announce "Path to push: https://${GH_USER_NAME}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}.git $BRANCH"
-git push "https://${GH_USER_NAME}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}.git $BRANCH"
+announce "Path to push: https://${ORG}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}.git $BRANCH"
+git push "https://${ORG}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}.git $BRANCH"
 
 # Publish go cli binaries
 post_release_json()
@@ -59,7 +59,7 @@ announce "Creating release.."
 
 NEW_RELEASE_RESPONSE=$(curl --silent \
                             --write-out "\n%{http_code}" \
-                            -u "$GH_USER_NAME:$USER_PASSWORD" \
+                            -u "$ORG:$USER_PASSWORD" \
                             -H "Accept: application/json" \
                             -H "Content-Type:application/json" \
                             -X POST "https://api.github.com/repos/${ORG}/${REPO_NAME}/releases" \
@@ -81,7 +81,7 @@ UPLOAD_URL=$(echo "$NEW_RELEASE" | jq -r .upload_url | cut -f1 -d"{")
 announce "Uploading binaries"
 
 curl --fail \
-     -u "${GH_USER_NAME}:${USER_PASSWORD}" \
+     -u "${ORG}:${USER_PASSWORD}" \
      -H "Content-Type:application/octet-stream" \
      -X POST "${UPLOAD_URL}?name=${APP}-0.0.${RELEASE_COUNT}.tar.gz" \
      --data-binary "@tars/${APP}-0.0.${RELEASE_COUNT}.tar.gz" \
