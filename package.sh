@@ -1,6 +1,6 @@
 #!/bin/bash -e
 # Brew package script for GitHub Actions
-# Author: C Gillatt
+# Author: C Gillatt | https://github.com/chris-gillatt | Provided under the MIT license 
 
 # Prefix log output with the name of the script for easy identification.
 announce () {
@@ -19,8 +19,8 @@ GIT_REVISION=$(git rev-parse HEAD)
 
 # Compress new app version and place in a directory for seperation.
 # This is useful when there's several files to package up too.
-mkdir -v tars
-tar cvf tars/"${APP}-0.0.${RELEASE_COUNT}.tar.gz" "$APP"
+mkdir tars
+tar cf tars/"${APP}-0.0.${RELEASE_COUNT}.tar.gz" "$APP"
 
 # Generate Ruby file for Brew using the erb template.
 erb "${APP}.erb" > "${APP}.rb"
