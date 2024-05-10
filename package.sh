@@ -10,8 +10,8 @@ env | sort
 announce "-----END ENV------"
 
 announce "Set Git Config"
-git config --global user.name "$CG_GIT_USERNAME"
-git config --global user.email "$CG_GIT_EMAIL"
+# git config --global user.name "$CG_GIT_USERNAME"
+# git config --global user.email "$CG_GIT_EMAIL"
 
 echo 
 announce "-----GIT CONFIG------"
@@ -21,7 +21,7 @@ echo
 
 export APP="tmaj"
 REPO_NAME="tmaj"
-BRANCH="main"
+# BRANCH="main"
 
 export RELEASE_COUNT="$GITHUB_RUN_NUMBER"
 GIT_REVISION=$(git rev-parse HEAD)
@@ -50,7 +50,7 @@ git remote -v
 announce "-----END GIT remote------"
 
 announce
-git push https://${CG_GITHUB_USERNAME}:${CG_GITHUB_PAT}@github.com/${CG_ORG}/tmaj.git ${BRANCH}
+git push # https://${CG_GITHUB_USERNAME}:${CG_GITHUB_PAT}@github.com/${CG_ORG}/tmaj.git ${BRANCH}
 
 announce "Got HERE"
 
