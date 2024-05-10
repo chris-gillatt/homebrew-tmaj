@@ -44,6 +44,11 @@ git commit -m "Push $APP Release 0.0.${RELEASE_COUNT}"
 announce "-----GIT STATUS------"
 git status
 announce "-----END GIT status------"
+
+announce "-----GIT remote------"
+git remote -v
+announce "-----END GIT remote------"
+
 announce "Path to push: https://${GH_USER_NAME}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}.git $BRANCH"
 git push "https://${GH_USER_NAME}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}.git $BRANCH"
 
