@@ -71,7 +71,7 @@ announce "Creating release.."
 
 NEW_RELEASE_RESPONSE=$(curl --silent \
                             --write-out "\n%{http_code}" \
-                            -u "$GITHUB_ACTOR:$CG_GITHUB_PAT" \
+                            -u "$CG_GITHUB_USERNAME:$CG_GITHUB_PAT" \
                             -H "Accept: application/json" \
                             -H "Content-Type:application/json" \
                             -X POST "https://api.github.com/repos/${ORG}/${REPO_NAME}/releases" \
@@ -93,7 +93,7 @@ UPLOAD_URL=$(echo "$NEW_RELEASE" | jq -r .upload_url | cut -f1 -d"{")
 announce "Uploading binaries"
 
 curl --fail \
-     -u "${GITHUB_ACTOR}:${CG_GITHUB_PAT}" \
+     -u "${CG_GITHUB_USERNAME}:${CG_GITHUB_PAT}" \
      -H "Content-Type:application/octet-stream" \
      -X POST "${UPLOAD_URL}?name=${APP}-0.0.${RELEASE_COUNT}.tar.gz" \
      --data-binary "@tars/${APP}-0.0.${RELEASE_COUNT}.tar.gz" \
