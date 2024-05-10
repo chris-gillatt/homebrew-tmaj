@@ -36,8 +36,12 @@ erb "${APP}.erb" > "${APP}.rb"
 ## Git Tasks
 git add "${APP}.rb"
 # Commit and push files to repo
-git commit -m "Push $APP Release 0.0.${RELEASE_COUNT}" &&
-git push https://"${USER_NAME}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}".git "$BRANCH"
+git commit -m "Push $APP Release 0.0.${RELEASE_COUNT}"
+announce "-----GIT STATUS------"
+git status
+announce "-----END GIT status------"
+announce "Path to push: https://${USER_NAME}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}.git $BRANCH"
+git push "https://${USER_NAME}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}.git $BRANCH"
 
 # Publish go cli binaries
 post_release_json()
