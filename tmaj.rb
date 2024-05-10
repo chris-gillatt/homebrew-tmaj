@@ -1,9 +1,9 @@
 class Tmaj < Formula
   desc "Prints a random joke on the command-line"
   homepage "https://github.com/chris-gillatt/tmaj"
-  url "https://github.com/chris-gillatt/tmaj/releases/download/0.0.49/tmaj-0.0.49.tar.gz"
-  sha256 "ad16d75932bad12052e8bb454dfa0c8f5c5013e3fa9c76521ed53d764562ffd4"
-  version "0.0.49"
+  url "https://github.com/chris-gillatt/tmaj/releases/download/0.0.50/tmaj-0.0.50.tar.gz"
+  sha256 "1eef342c18bdc6aec9b26f37da771b15920e76213adf971248882b2aef59bd4c"
+  version "0.0.50"
 
   depends_on ["curl", "figlet", "cowsay", "lolcat", "coreutils"]
 
