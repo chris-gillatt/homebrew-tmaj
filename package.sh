@@ -7,7 +7,7 @@ announce () {
   echo "$(basename "$0"): $*"
 } # End announce
 
-announce "Starting up!"
+announce "Starting up @ $(date)"
 
 # Set app and Repository name here.
 export APP="tmaj"
@@ -75,5 +75,6 @@ curl --fail \
      --data-binary "@tars/${APP}-0.0.${RELEASE_COUNT}.tar.gz" \
      | jq -rc '.name + " - " + .url + " - " + .state'
 
-announce "Upload successful"
-announce "Script completed successfully!"
+announce "Upload completed successfully"
+
+announce "Finishing up @ $(date)"
