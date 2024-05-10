@@ -9,8 +9,8 @@ announce "-----ENV------"
 env | sort
 announce "-----END ENV------"
 
-git config --global user.email "$USER_EMAIL"
-git config --global user.name "$USER_NAME"
+git config user.name "github-actions[bot]"
+git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
 announce "-----GIT CONFIG------"
 git config --list
