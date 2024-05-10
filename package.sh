@@ -49,8 +49,8 @@ announce "-----GIT remote------"
 git remote -v
 announce "-----END GIT remote------"
 
-announce "Path to push: https://${GH_USER_NAME}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME} $BRANCH"
-git push "https://${GH_USER_NAME}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME} $BRANCH"
+announce "Path to push: https://${GH_USER_NAME}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}"
+git push "https://${GH_USER_NAME}:${USER_PASSWORD}@github.com/${ORG}/${REPO_NAME}"
 
 # Publish go cli binaries
 post_release_json()
