@@ -52,21 +52,30 @@ COLOUR="false"
 LARGE_FONT="false"
 SPEECH_BUBBLE="false"
 
+# Usage function
+usage() {
+
+echo "Usage: $(basename $0) [-h] [-c] [-l] [-s]
+
+Print a random joke on the command-line from the icanhazdadjoke.com API
+
+Options:
+    -h    Show help message
+    -c    Print a joke in multi-colour
+    -l    Print a joke in large font
+    -s    Print a joke inside a speech bubble with a random character"
+} # End usage
+
 # Parse command line flags
-while getopts "cfl" opt; do
+while getopts "clsh" opt; do
     case ${opt} in
         c ) COLOUR="true";;
-        f ) LARGE_FONT="true";;
-        l ) SPEECH_BUBBLE="true";;
-        \? ) echo "Usage: $(basename $0) [-c] [-f] [-l]"
-             echo "Options:"
-             echo "  -c    Print joke in colour"
-             echo "  -f    Print joke in large font"
-             echo "  -l    Print joke inside a speech bubble"
-             exit 1;;
+        l ) LARGE_FONT="true";;
+        s ) SPEECH_BUBBLE="true";;
+        h ) usage; exit 0 ;;
+        \? ) usage; exit 1 ;;
     esac
 done
-
 # Fetch a random joke
 JOKE=$(fetch_joke)
 
