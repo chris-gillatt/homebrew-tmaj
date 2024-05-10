@@ -1,67 +1,66 @@
-#!/bin/bash
+#!/bin/bash -e
 # Prints a random joke on the command-line from the icanhazdadjoke.com API
+# Author: C Gillatt | https://github.com/chris-gillatt | Provided under the MIT license 
 
 fetch_joke() {
-    joke=$(curl -sH "Accept: text/plain" https://icanhazdadjoke.com/)
-    echo "$joke"
-}
+    JOKE=$(curl -sH "Accept: text/plain" https://icanhazdadjoke.com/)
+    echo "$JOKE"
+} # End fetch_joke
 
-# Function to print a joke with specified options
+# Print a joke with selected options
 print_joke() {
-    local joke="$1"
-    local color="$2"
-    local large_font="$3"
-    local speech_bubble="$4"
+    local JOKE="$1"
+    local COLOUR="$2"
+    local LARGE_FONT="$3"
+    local SPEECH_BUBBLE="$4"
 
-    local cowsay_path=$(find /opt/homebrew/Cellar/cowsay -type d -name 'cows')/
+    local COWSAY_PATH=$(find /opt/homebrew/Cellar/cowsay -type d -name 'cows')/
 
-    if [[ "$speech_bubble" == "true" ]]; then
-        if [ -d "$cowsay_path" ]; then
-            if [[ "$color" == "true" ]]; then
-                if [[ "$large_font" == "true" ]]; then
-                    echo "$joke" | figlet | lolcat | cowsay -n -f "$(ls "$cowsay_path" | shuf -n 1)" | lolcat
+    if [[ "$SPEECH_BUBBLE" == "true" ]]; then
+        if [ -d "$COWSAY_PATH" ]; then
+            if [[ "$COLOUR" == "true" ]]; then
+                if [[ "$LARGE_FONT" == "true" ]]; then
+                    echo "$JOKE" | figlet | lolcat | cowsay -n -f "$(ls "$COWSAY_PATH" | shuf -n 1)" | lolcat
                 else
-                    echo "$joke" | cowsay -n -f "$(ls "$cowsay_path" | shuf -n 1)" | lolcat
+                    echo "$JOKE" | cowsay -n -f "$(ls "$COWSAY_PATH" | shuf -n 1)" | lolcat
                 fi
             else
-                if [[ "$large_font" == "true" ]]; then
-                    echo "$joke" | figlet | cowsay -n -f "$(ls "$cowsay_path" | shuf -n 1)"
+                if [[ "$LARGE_FONT" == "true" ]]; then
+                    echo "$JOKE" | figlet | cowsay -n -f "$(ls "$COWSAY_PATH" | shuf -n 1)"
                 else
-                    echo "$joke" | cowsay -n -f "$(ls "$cowsay_path" | shuf -n 1)"
+                    echo "$JOKE" | cowsay -n -f "$(ls "$COWSAY_PATH" | shuf -n 1)"
                 fi
             fi
         else
-            echo "Error: Cowsay cowfiles directory not found at $cowsay_path"
+            echo "Error: Cowsay cowfiles directory not found at $COWSAY_PATH"
         fi
-    elif [[ "$color" == "true" ]]; then
-        if [[ "$large_font" == "true" ]]; then
-            echo "$joke" | figlet | lolcat
+    elif [[ "$COLOUR" == "true" ]]; then
+        if [[ "$LARGE_FONT" == "true" ]]; then
+            echo "$JOKE" | figlet | lolcat
         else
-            echo "$joke" | lolcat
+            echo "$JOKE" | lolcat
         fi
-    elif [[ "$large_font" == "true" ]]; then
-        echo "$joke" | figlet
+    elif [[ "$LARGE_FONT" == "true" ]]; then
+        echo "$JOKE" | figlet
     else
-        echo "$joke"
+        echo "$JOKE"
     fi
-}
-
-# Main script
+} # End print_joke
 
 # Initialize flags
-color="false"
-large_font="false"
-speech_bubble="false"
+COLOUR="false"
+LARGE_FONT="false"
+SPEECH_BUBBLE="false"
 
 # Parse command line flags
 while getopts "cfl" opt; do
     case ${opt} in
-        c ) color="true";;
-        f ) large_font="true";;
-        l ) speech_bubble="true";;
+        c ) COLOUR="true";;
+        f ) LARGE_FONT="true";;
+        l ) SPEECH_BUBBLE="true";;
         \? ) echo "Usage: $(basename $0) [-c] [-f] [-l]"
              echo "Options:"
-             echo "  -c    Print joke in color"
+             echo "  -c    Print joke in colour"
              echo "  -f    Print joke in large font"
              echo "  -l    Print joke inside a speech bubble"
              exit 1;;
@@ -69,7 +68,7 @@ while getopts "cfl" opt; do
 done
 
 # Fetch a random joke
-joke=$(fetch_joke)
+JOKE=$(fetch_joke)
 
-# Print the joke with specified options
-print_joke "$joke" "$color" "$large_font" "$speech_bubble"
+# Print the joke with options selected
+print_joke "$JOKE" "$COLOUR" "$LARGE_FONT" "$SPEECH_BUBBLE"
