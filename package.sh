@@ -29,6 +29,9 @@ REPO_NAME="tmaj"
 
 #export RELEASE_COUNT="$GITHUB_RUN_NUMBER"
 GIT_REVISION=$(git rev-parse HEAD)
+export GITHUB_RUN_NUMBER
+
+test -n "$GITHUB_RUN_NUMBER" || exit 1
 
 # Compress new version and place in tars directory
 mkdir -v tars
