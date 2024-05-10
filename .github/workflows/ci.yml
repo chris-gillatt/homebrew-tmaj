@@ -28,7 +28,7 @@ jobs:
       - name: Create Release 
         env:
             CG_GITHUB_PAT: ${{ secrets.CG_GITHUB_PAT }}
-            CG_ORG: ${{ vars.ORG }}
+            CG_ORG: ${{ vars.CG_ORG }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
