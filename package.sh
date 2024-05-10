@@ -11,7 +11,7 @@ announce "Starting up @ $(date)"
 
 # Set app and Repository name here.
 export APP="tmaj"
-REPO_NAME="tmaj"
+REPO_NAME="homebrew-tmaj"
 
 # Use the GitHub Actions Run number for versioning.
 export RELEASE_COUNT="$GITHUB_RUN_NUMBER"
