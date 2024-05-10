@@ -27,10 +27,9 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Create Release 
         env:
-            CG_GIT_EMAIL: ${{ secrets.CG_GIT_EMAIL }}
             CG_GITHUB_PAT: ${{ secrets.CG_GITHUB_PAT }}
-            CG_GIT_USERNAME: ${{ vars.CG_GIT_USERNAME }}
-            CG_GITHUB_USERNAME: ${{ vars.CG_GITHUB_USERNAME }}
             CG_ORG: ${{ vars.ORG }}
         run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           ./package.sh
