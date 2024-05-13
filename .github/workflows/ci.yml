@@ -27,6 +27,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Create Release 
         env:
+            GH_TOKEN: ${{ secrets.CG_GITHUB_PAT }}
             CG_GITHUB_PAT: ${{ secrets.CG_GITHUB_PAT }}
             CG_ORG: ${{ vars.CG_ORG }}
         run: |
