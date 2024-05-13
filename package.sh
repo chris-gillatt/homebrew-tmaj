@@ -3,24 +3,24 @@
 # Author: C Gillatt | https://github.com/chris-gillatt | Provided under the MIT license 
 
 # Prefix log output with the name of the script for easy identification.
-announce () {
-  echo "$(basename "$0"): $*"
-} # End announce
+# announce () {
+#   echo "$(basename "$0"): $*"
+# } # End announce
 
-announce "Starting up @ $(date)"
+# announce "Starting up @ $(date)"
 
 # Set app and Repository name here.
 export APP="tmaj"
-REPO_NAME="homebrew-tmaj"
+# REPO_NAME="homebrew-tmaj"
 
 # Use the GitHub Actions Run number for versioning.
-export RELEASE_COUNT="$GITHUB_RUN_NUMBER"
-GIT_REVISION=$(git rev-parse HEAD)
+#export RELEASE_COUNT="$GITHUB_RUN_NUMBER"
+# GIT_REVISION=$(git rev-parse HEAD)
 
 # Compress new app version and place in a directory for seperation.
 # This is useful when there's several files to package up too.
 mkdir dist
-tar cf dist/"${APP}-0.0.${RELEASE_COUNT}.tar.gz" "$APP"
+tar cf dist/"${APP}-0.0.${GITHUB_RUN_NUMBER}.tar.gz" "$APP"
 
 # Generate Ruby file for Brew using the erb template.
 erb "${APP}.erb" > "${APP}.rb"
@@ -28,7 +28,7 @@ erb "${APP}.erb" > "${APP}.rb"
 ## Commit the new ruby file back to the repository.
 git add "${APP}.rb"
 # Commit and push files to repo
-git commit -m "$APP release 0.0.${RELEASE_COUNT}"
+git commit -m "$APP release 0.0.${GITHUB_RUN_NUMBER}"
 git push
 
 # Create a json payload to help us create a release with GitHub tags.
@@ -43,7 +43,7 @@ git push
 # EOF
 # }
 
-announce "Creating release"
+# announce "Creating release"
 
 # NEW_RELEASE_RESPONSE=$(curl --silent \
 #                             --write-out "\n%{http_code}" \
@@ -77,6 +77,6 @@ announce "Creating release"
 
 # announce "Upload completed successfully"
 
-gh release create v0.0.${RELEASE_COUNT} ./dist/*.tar.gz --title "0.0.${RELEASE_COUNT}" --generate-notes
+gh release create v0.0.${GITHUB_RUN_NUMBER} ./dist/*.tar.gz --title "0.0.${GITHUB_RUN_NUMBER}" --generate-notes
 
-announce "Finishing up @ $(date)"
+# announce "Finishing up @ $(date)"
