@@ -1,7 +1,7 @@
 class Tmaj < Formula
   desc "Prints a random joke on the command-line"
   homepage "https://github.com/chris-gillatt/homebrew-tmaj"
-  url "https://github.com/chris-gillatt/homebrew-tmaj/releases/download/0.0.<%= ENV["GITHUB_RUN_NUMBER"] %>/tmaj-0.0.<%= ENV["GITHUB_RUN_NUMBER"] %>.tar.gz"
+  url "https://github.com/chris-gillatt/homebrew-tmaj/releases/download/v0.0.<%= ENV["GITHUB_RUN_NUMBER"] %>/tmaj-0.0.<%= ENV["GITHUB_RUN_NUMBER"] %>.tar.gz"
   sha256 "<%= `sha256sum dist/tmaj-0.0.#{ENV["GITHUB_RUN_NUMBER"]}.tar.gz | awk '{printf $1}'` %>"
   version "0.0.<%= ENV["GITHUB_RUN_NUMBER"] %>"
 
