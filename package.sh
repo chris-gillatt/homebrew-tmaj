@@ -77,6 +77,6 @@ announce "Creating release"
 
 # announce "Upload completed successfully"
 
-gh release create v0.0.${RELEASE_COUNT} ./dist/*.tgz --title "0.0.${RELEASE_COUNT}" --generate-notes
+gh release create v0.0.${RELEASE_COUNT} ./dist/*.tar.gz --title "0.0.${RELEASE_COUNT}" --generate-notes
 
 announce "Finishing up @ $(date)"
