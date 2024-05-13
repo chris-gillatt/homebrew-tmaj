@@ -4,13 +4,6 @@
 
 export APP="tmaj"
 
-echo "GITHUB_RUN_NUMBER: $GITHUB_RUN_NUMBER"
-
-export RELEASE_COUNT="$GITHUB_RUN_NUMBER"
-
-echo "GITHUB_RUN_NUMBER: $GITHUB_RUN_NUMBER"
-echo "RELEASE_COUNT: $RELEASE_COUNT"
-
 mkdir dist
 tar cfv dist/"${APP}-0.0.${GITHUB_RUN_NUMBER}.tar.gz" "$APP"
 
@@ -22,5 +15,5 @@ git add "${APP}.rb"
 # Commit and push files to repo
 git commit -m "$APP release 0.0.${GITHUB_RUN_NUMBER}"
 git push
-
+# Create and publish release 
 gh release create v0.0.${GITHUB_RUN_NUMBER} ./dist/*.tar.gz --title "0.0.${GITHUB_RUN_NUMBER}" --generate-notes
