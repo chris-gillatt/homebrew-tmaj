@@ -15,5 +15,6 @@ git add "${APP}.rb"
 # Commit and push files to repo
 git commit -m "$APP release 0.0.${GITHUB_RUN_NUMBER}"
 git push
-# Create and publish release 
+
 gh release create v0.0.${GITHUB_RUN_NUMBER} ./dist/*.tar.gz --title "0.0.${GITHUB_RUN_NUMBER}" --generate-notes
+# 
