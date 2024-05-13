@@ -11,6 +11,7 @@
 
 # Set app and Repository name here.
 export APP="tmaj"
+export GITHUB_RUN_NUMBER
 # REPO_NAME="homebrew-tmaj"
 
 # Use the GitHub Actions Run number for versioning.
