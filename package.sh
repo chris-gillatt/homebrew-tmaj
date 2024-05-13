@@ -19,8 +19,8 @@ GIT_REVISION=$(git rev-parse HEAD)
 
 # Compress new app version and place in a directory for seperation.
 # This is useful when there's several files to package up too.
-mkdir tars
-tar cf tars/"${APP}-0.0.${RELEASE_COUNT}.tar.gz" "$APP"
+mkdir dist
+tar cf dist/"${APP}-0.0.${RELEASE_COUNT}.tar.gz" "$APP"
 
 # Generate Ruby file for Brew using the erb template.
 erb "${APP}.erb" > "${APP}.rb"
@@ -32,49 +32,51 @@ git commit -m "$APP release 0.0.${RELEASE_COUNT}"
 git push
 
 # Create a json payload to help us create a release with GitHub tags.
-post_release_json()
-{
-  cat <<EOF
-{
-  "tag_name":         "0.0.${RELEASE_COUNT}",
-  "target_commitish": "${GIT_REVISION}",
-  "name":             "0.0.${RELEASE_COUNT}"
-}
-EOF
-}
+# post_release_json()
+# {
+#   cat <<EOF
+# {
+#   "tag_name":         "0.0.${RELEASE_COUNT}",
+#   "target_commitish": "${GIT_REVISION}",
+#   "name":             "0.0.${RELEASE_COUNT}"
+# }
+# EOF
+# }
 
 announce "Creating release"
 
-NEW_RELEASE_RESPONSE=$(curl --silent \
-                            --write-out "\n%{http_code}" \
-                            -u "$CG_GITHUB_USERNAME:$CG_GITHUB_PAT" \
-                            -H "Accept: application/json" \
-                            -H "Content-Type:application/json" \
-                            -X POST "https://api.github.com/repos/${CG_ORG}/${REPO_NAME}/releases" \
-                            --data "$(post_release_json)")
-STATUS_CODE=$(echo "$NEW_RELEASE_RESPONSE" | tail -n 1)
-NEW_RELEASE=$(echo "$NEW_RELEASE_RESPONSE" | sed '$d')
+# NEW_RELEASE_RESPONSE=$(curl --silent \
+#                             --write-out "\n%{http_code}" \
+#                             -u "$CG_GITHUB_USERNAME:$CG_GITHUB_PAT" \
+#                             -H "Accept: application/json" \
+#                             -H "Content-Type:application/json" \
+#                             -X POST "https://api.github.com/repos/${CG_ORG}/${REPO_NAME}/releases" \
+#                             --data "$(post_release_json)")
+# STATUS_CODE=$(echo "$NEW_RELEASE_RESPONSE" | tail -n 1)
+# NEW_RELEASE=$(echo "$NEW_RELEASE_RESPONSE" | sed '$d')
 
-if [[ $STATUS_CODE -ge 400 ]]; then
-  announce 'ERROR: Failed to create release'
-  announce "$STATUS_CODE"
-  announce "$NEW_RELEASE"
-  exit 1
-fi
+# if [[ $STATUS_CODE -ge 400 ]]; then
+#   announce 'ERROR: Failed to create release'
+#   announce "$STATUS_CODE"
+#   announce "$NEW_RELEASE"
+#   exit 1
+# fi
 
-announce "Release created successfully"
+# announce "Release created successfully"
 
-UPLOAD_URL=$(echo "$NEW_RELEASE" | jq -r .upload_url | cut -f1 -d"{")
+# UPLOAD_URL=$(echo "$NEW_RELEASE" | jq -r .upload_url | cut -f1 -d"{")
 
-announce "Uploading binaries"
+# announce "Uploading binaries"
 
-curl --fail \
-     -u "${CG_GITHUB_USERNAME}:${CG_GITHUB_PAT}" \
-     -H "Content-Type:application/octet-stream" \
-     -X POST "${UPLOAD_URL}?name=${APP}-0.0.${RELEASE_COUNT}.tar.gz" \
-     --data-binary "@tars/${APP}-0.0.${RELEASE_COUNT}.tar.gz" \
-     | jq -rc '.name + " - " + .url + " - " + .state'
+# curl --fail \
+#      -u "${CG_GITHUB_USERNAME}:${CG_GITHUB_PAT}" \
+#      -H "Content-Type:application/octet-stream" \
+#      -X POST "${UPLOAD_URL}?name=${APP}-0.0.${RELEASE_COUNT}.tar.gz" \
+#      --data-binary "@tars/${APP}-0.0.${RELEASE_COUNT}.tar.gz" \
+#      | jq -rc '.name + " - " + .url + " - " + .state'
 
-announce "Upload completed successfully"
+# announce "Upload completed successfully"
+
+gh release create v0.0.${RELEASE_COUNT} ./dist/*.tgz --title "0.0.${RELEASE_COUNT}" --generate-notes
 
 announce "Finishing up @ $(date)"
