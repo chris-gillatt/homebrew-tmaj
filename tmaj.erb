@@ -14,4 +14,8 @@ class Tmaj < Formula
   def install
     bin.install "tmaj"
   end
+
+  test do
+    system bin/"tmaj"
+  end
 end
