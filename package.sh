@@ -4,7 +4,7 @@
 
 export APP="tmaj"
 
-echo "RELEASE_COUNT: $RELEASE_COUNT"
+echo "GITHUB_RUN_NUMBER: $GITHUB_RUN_NUMBER"
 
 mkdir dist
 tar cfv dist/"${APP}-0.0.${GITHUB_RUN_NUMBER}.tar.gz" "$APP"
