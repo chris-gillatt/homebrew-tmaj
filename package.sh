@@ -11,8 +11,11 @@
 
 # Set app and Repository name here.
 export APP="tmaj"
-export GITHUB_RUN_NUMBER
 # REPO_NAME="homebrew-tmaj"
+
+env | sort
+
+export RELEASE_COUNT="$GITHUB_RUN_NUMBER"
 
 # Use the GitHub Actions Run number for versioning.
 #export RELEASE_COUNT="$GITHUB_RUN_NUMBER"
@@ -21,7 +24,7 @@ export GITHUB_RUN_NUMBER
 # Compress new app version and place in a directory for seperation.
 # This is useful when there's several files to package up too.
 mkdir dist
-tar cf dist/"${APP}-0.0.${GITHUB_RUN_NUMBER}.tar.gz" "$APP"
+tar cf dist/"${APP}-0.0.${RELEASE_COUNT}.tar.gz" "$APP"
 
 # Generate Ruby file for Brew using the erb template.
 erb "${APP}.erb" > "${APP}.rb"
@@ -29,7 +32,7 @@ erb "${APP}.erb" > "${APP}.rb"
 ## Commit the new ruby file back to the repository.
 git add "${APP}.rb"
 # Commit and push files to repo
-git commit -m "$APP release 0.0.${GITHUB_RUN_NUMBER}"
+git commit -m "$APP release 0.0.${RELEASE_COUNT}"
 git push
 
 # Create a json payload to help us create a release with GitHub tags.
@@ -78,6 +81,6 @@ git push
 
 # announce "Upload completed successfully"
 
-gh release create v0.0.${GITHUB_RUN_NUMBER} ./dist/*.tar.gz --title "0.0.${GITHUB_RUN_NUMBER}" --generate-notes
+gh release create v0.0.${RELEASE_COUNT} ./dist/*.tar.gz --title "0.0.${RELEASE_COUNT}" --generate-notes
 
 # announce "Finishing up @ $(date)"
