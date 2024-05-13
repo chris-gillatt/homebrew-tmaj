@@ -13,7 +13,9 @@
 export APP="tmaj"
 # REPO_NAME="homebrew-tmaj"
 
-env | sort
+# env | sort
+
+echo "GITHUB_RUN_NUMBER: $GITHUB_RUN_NUMBER"
 
 export RELEASE_COUNT="$GITHUB_RUN_NUMBER"
 
